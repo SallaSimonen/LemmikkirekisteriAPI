@@ -40,7 +40,7 @@ public class LemmikkirekisteriDB
         }
     }
 
-    public void LisaaOmistaja(int id, string nimi, string puh)
+    public void LisaaOmistaja(string nimi, string puh)
     {
         // Luodaan yhteys tietokantaan.
         using (var connection = new SqliteConnection(_connectionString))
@@ -49,15 +49,14 @@ public class LemmikkirekisteriDB
 
             // Lisätään omistaja tietokantaan.
             var command = connection.CreateCommand();
-            command.CommandText = "INSERT INTO Omistajat (id, nimi, puhelinnumero) VALUES (@Id, @Nimi, @Puh)";
-            command.Parameters.AddWithValue("Id", id);
+            command.CommandText = "INSERT INTO Omistajat (nimi, puhelinnumero) VALUES (@Nimi, @Puh)";
             command.Parameters.AddWithValue("Nimi", nimi);
             command.Parameters.AddWithValue("Puh", puh);
             command.ExecuteNonQuery();
         }
     }
 
-    public void LisaaLemmikki(int id, string omistajanNimi, string lemmikinNimi, string laji)
+    public void LisaaLemmikki(string omistajanNimi, string lemmikinNimi, string laji)
     {
         var nimiLower = omistajanNimi.ToLower();
 
@@ -78,8 +77,7 @@ public class LemmikkirekisteriDB
 
                 // Lisätään lemmikki tietokantaan.
                 var command2 = connection.CreateCommand();
-                command2.CommandText = "INSERT INTO Lemmikit (id, omistaja_id, nimi, laji) VALUES (@Id, @OmistajaId, @Nimi, @Laji)";
-                command2.Parameters.AddWithValue("Id", id);
+                command2.CommandText = "INSERT INTO Lemmikit (omistaja_id, nimi, laji) VALUES (@OmistajaId, @Nimi, @Laji)";
                 command2.Parameters.AddWithValue("OmistajaId", omistajaId);
                 command2.Parameters.AddWithValue("Nimi", lemmikinNimi);
                 command2.Parameters.AddWithValue("Laji", laji);
